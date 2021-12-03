@@ -1,0 +1,91 @@
+#include <Servo.h>
+
+#define trigPin 7
+#define echoPin 8 
+#define mr_1 1
+#define mr_2 2
+#define  ml_1 3
+#define ml_2 4
+#define irSensor1 5
+#define irSensor2 6 
+float duration,distance;
+int pos=0;
+Servo myservo;
+
+void setup() {
+  pinMode(trigPin,OUTPUT);
+   pinMode(echoPin,INPUT);
+   pinMode(mr_1,OUTPUT);
+ pinMode(mr_2,OUTPUT);
+ pinMode(ml_1,OUTPUT);
+ pinMode(ml_2,OUTPUT);
+pinMode(irSensor1,INPUT);//right
+pinMode(irSensor2,INPUT);//left
+ for (pos = 0; pos <= 180; pos += 1) { // goes from 0 degrees to 180 degrees
+    // in steps of 1 degree
+    myservo.write(pos);              // tell servo to go to position in variable 'pos'
+    delay(15);                       // waits 15ms for the servo to reach the position
+  }
+  for (pos = 180; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
+    myservo.write(pos);              // tell servo to go to position in variable 'pos'
+    delay(15); 
+    myservo.detach();// waits 15ms for the servo to reach the position
+  }
+ 
+}
+
+void loop() {
+myservo.attach(9);
+digitalWrite(trigPin,LOW);
+delay(15);
+  digitalWrite(trigPin,HIGH);
+  delay(15);
+   digitalWrite(trigPin,LOW);
+  duration=pulseIn(echoPin,HIGH);
+  distance=duration*0.0133/2;
+  int sensorValue1=digitalRead(irSensor1);
+int sensorValue2=digitalRead(irSensor2);
+
+
+if(distance<5&&sensorValue1==1&&sensorValue2==1)
+{
+
+ 
+
+  digitalWrite(mr_1,HIGH);
+ digitalWrite(mr_2,LOW);
+ digitalWrite(ml_1,HIGH);
+ digitalWrite(ml_2,LOW);   
+}
+
+else if(distance<5&&sensorValue1==0&&sensorValue2==1)
+{
+
+
+  
+  digitalWrite(mr_1,HIGH);
+digitalWrite(mr_2,LOW);
+digitalWrite(ml_1,LOW);
+  digitalWrite(ml_2,LOW);
+  }
+  else if(distance<5&&sensorValue1==1&&sensorValue2==0)
+  {
+
+   
+    
+    digitalWrite(mr_1,LOW);
+  digitalWrite(mr_2,LOW);
+  digitalWrite(ml_1,HIGH);
+  digitalWrite(ml_2,LOW);
+     
+    
+    }
+  else
+{
+  myservo.attach(9);
+  digitalWrite(mr_1,LOW);
+digitalWrite(mr_2,LOW);
+digitalWrite(ml_1,LOW);
+digitalWrite(ml_2,LOW);
+}
+}
